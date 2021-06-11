@@ -6,9 +6,10 @@ from datetime import timedelta
 from urllib.parse import urlencode
 import time
 import json
+import env_config
 
 datalist = []
-stocks = 0000 #公司代號
+stocks = env_config.stocks
 now = datetime.date.today()
 this_month_start = datetime.datetime(now.year, now.month, 1)
 last_month_end = this_month_start - timedelta(days=1)
@@ -64,14 +65,14 @@ def announcements(stock, year):
 announcements(stocks,years)
 
 
-def telegram_bot_sendMessage (token,message,member):
+def telegram_bot_sendMessage (token,message,chat_id):
     url ="https://api.telegram.org/bot"+str(token)+"/sendMessage"
-    payload = {"chat_id": str(member),"text": str(message),"parse_mode":"HTML"}
+    payload = {"chat_id": str(chat_id),"text": str(message),"parse_mode":"HTML"}
     headers = {"Content-Type": "application/json"}
     requests.request("POST", url, headers=headers, data=json.dumps(payload))
 
-token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" #telegram bot token
-member = "000000000" # member ID
+token = env_config.token
+chat_id = env_config.chat_id
+chat_id = '1037459971'
 telegram_bot_form = "重大訊息擷取回報\r\n"+str(datalist).replace("[{'","\r\n").replace("', '","\r\n").replace(", '","\r\n").replace("'}, {'","\r\n\r\n").replace("': '",":").replace("': ",":").replace("'}]","") #擷取內容
-print (datalist)
-telegram_bot_sendMessage(token, telegram_bot_form, member)
+telegram_bot_sendMessage(token, telegram_bot_form, chat_id)

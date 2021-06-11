@@ -4,9 +4,10 @@ import calendar
 import json
 import datetime
 from datetime import timedelta
+import env_config
 
 datalist = {"標題":"","年度": "" ,"月份": "", "增減百分比": "", "本月": "", "去年同期": ""}
-stocks = 0000 #公司代號
+stocks = env_config.stocks #公司代號
 now = datetime.date.today()
 this_month_start = datetime.datetime(now.year, now.month, 1)
 last_month_end = this_month_start - timedelta(days=1)
@@ -33,13 +34,13 @@ def financials(stock,year,month):
 financials(stocks,years,months)
 
 
-def telegram_bot_sendMessage (token,message,member):
+def telegram_bot_sendMessage (token,message,chat_id):
     url ="https://api.telegram.org/bot"+str(token)+"/sendMessage"
-    payload = {"chat_id": str(member),"text": str(message)}
+    payload = {"chat_id": str(chat_id),"text": str(message)}
     headers = {"Content-Type": "application/json"}
     requests.request("POST", url, headers=headers, data=json.dumps(payload))
 
-token = "XXXXXXXXXXXXXXXXXXXXXXX" #telegram bot token
-member = "0000000000" # member ID
+token = env_config.token
+chat_id = env_config.chat_id # member ID
 telegram_bot_form = "財報擷取回報:\r\n"+str(datalist).replace("{'","").replace("', '","\r\n").replace(", '","\r\n").replace("': '",":").replace("'}","").replace("'","")
-telegram_bot_sendMessage(token,telegram_bot_form,member)
+telegram_bot_sendMessage(token,telegram_bot_form,chat_id)
