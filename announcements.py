@@ -9,7 +9,6 @@ import json
 import env_config
 
 datalist = []
-stocks = env_config.stocks
 now = datetime.date.today()
 this_month_start = datetime.datetime(now.year, now.month, 1)
 last_month_end = this_month_start - timedelta(days=1)
@@ -62,7 +61,7 @@ def announcements(stock, year):
         datadic["內容"] = ts_html.find("table",class_="hasBorder").text
         datalist.append(datadic)
 
-announcements(stocks,years)
+announcements(env_config.stocks,years)
 
 
 def telegram_bot_sendMessage (token,message,chat_id):
@@ -71,8 +70,5 @@ def telegram_bot_sendMessage (token,message,chat_id):
     headers = {"Content-Type": "application/json"}
     requests.request("POST", url, headers=headers, data=json.dumps(payload))
 
-token = env_config.token
-chat_id = env_config.chat_id
-chat_id = '1037459971'
 telegram_bot_form = "重大訊息擷取回報\r\n"+str(datalist).replace("[{'","\r\n").replace("', '","\r\n").replace(", '","\r\n").replace("'}, {'","\r\n\r\n").replace("': '",":").replace("': ",":").replace("'}]","") #擷取內容
-telegram_bot_sendMessage(token, telegram_bot_form, chat_id)
+telegram_bot_sendMessage(env_config.token, telegram_bot_form, env_config.chat_id)

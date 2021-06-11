@@ -7,7 +7,6 @@ from datetime import timedelta
 import env_config
 
 datalist = {"標題":"","年度": "" ,"月份": "", "增減百分比": "", "本月": "", "去年同期": ""}
-stocks = env_config.stocks #公司代號
 now = datetime.date.today()
 this_month_start = datetime.datetime(now.year, now.month, 1)
 last_month_end = this_month_start - timedelta(days=1)
@@ -31,7 +30,7 @@ def financials(stock,year,month):
         datalist["標題"] = "無資料"
         pass
 
-financials(stocks,years,months)
+financials(env_config.stocks,years,months)
 
 
 def telegram_bot_sendMessage (token,message,chat_id):
@@ -41,6 +40,5 @@ def telegram_bot_sendMessage (token,message,chat_id):
     requests.request("POST", url, headers=headers, data=json.dumps(payload))
 
 token = env_config.token
-chat_id = env_config.chat_id # member ID
 telegram_bot_form = "財報擷取回報:\r\n"+str(datalist).replace("{'","").replace("', '","\r\n").replace(", '","\r\n").replace("': '",":").replace("'}","").replace("'","")
-telegram_bot_sendMessage(token,telegram_bot_form,chat_id)
+telegram_bot_sendMessage(env_config.token,telegram_bot_form,env_config.chat_id)
