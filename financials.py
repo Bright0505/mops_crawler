@@ -39,6 +39,5 @@ def telegram_bot_sendMessage (token,message,chat_id):
     headers = {"Content-Type": "application/json"}
     requests.request("POST", url, headers=headers, data=json.dumps(payload))
 
-token = env_config.token
 telegram_bot_form = "財報擷取回報:\r\n"+str(datalist).replace("{'","").replace("', '","\r\n").replace(", '","\r\n").replace("': '",":").replace("'}","").replace("'","")
 telegram_bot_sendMessage(env_config.token,telegram_bot_form,env_config.chat_id)
